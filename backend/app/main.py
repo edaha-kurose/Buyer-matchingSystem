@@ -1,14 +1,24 @@
 """
 AIプレゼン自動スクリーニングシステム - メインアプリケーション
 """
-from fastapi import FastAPI
+import logging
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.api.v1 import auth, proposals, evaluations, summaries, supplier
 from app.db.session import engine
 from app.db.base import Base
+from app.core.exceptions import AppException
+
+# ロギング設定
+logging.basicConfig(
+    level=logging.DEBUG if settings.DEBUG else logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -82,3 +92,44 @@ async def health_check():
         "redis": "connected",
         "storage": "connected"
     }
+
+
+# ============ 例外ハンドラー ============
+
+@app.exception_handler(AppException)
+async def app_exception_handler(request: Request, exc: AppException):
+    """アプリケーション例外ハンドラー"""
+    logger.warning(
+        f"AppException: {exc.detail} | "
+        f"Status: {exc.status_code} | "
+        f"Path: {request.url.path}"
+    )
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "detail": exc.detail,
+            "error_code": exc.error_code,
+        },
+        headers=exc.headers,
+    )
+
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """一般例外ハンドラー（予期しないエラー）"""
+    logger.error(
+        f"Unhandled exception: {str(exc)} | "
+        f"Path: {request.url.path}",
+        exc_info=True
+    )
+
+    # 本番環境では詳細を隠す
+    detail = str(exc) if settings.DEBUG else "内部サーバーエラーが発生しました"
+
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": detail,
+            "error_code": "INTERNAL_SERVER_ERROR",
+        },
+    )

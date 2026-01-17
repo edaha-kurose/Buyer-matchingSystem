@@ -4,19 +4,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Text, JSON
 from sqlalchemy.orm import relationship
 from app.db.base import Base, TimestampMixin
-import enum
-
-
-class ProposalStatus(str, enum.Enum):
-    """提案ステータス"""
-    DRAFT = "draft"
-    SUBMITTED = "submitted"
-    ANALYZING = "analyzing"
-    QA_PENDING = "qa_pending"
-    QA_COMPLETED = "qa_completed"
-    EVALUATED = "evaluated"
-    ACCEPTED = "accepted"
-    REJECTED = "rejected"
+from app.models.enums import ProposalStatus
 
 
 class Proposal(Base, TimestampMixin):

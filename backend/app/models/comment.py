@@ -6,20 +6,7 @@ from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.db.base import Base
-import enum
-
-
-class ProposalStatus(str, enum.Enum):
-    """提案ステータス"""
-    DRAFT = "draft"                    # 下書き
-    SUBMITTED = "submitted"            # 提出済み（AI処理待ち）
-    AI_PROCESSING = "ai_processing"    # AI処理中
-    AI_EVALUATED = "ai_evaluated"      # AI評価完了
-    UNDER_REVIEW = "under_review"      # バイヤー検討中
-    MEETING_SCHEDULED = "meeting"      # 面談調整中
-    ACCEPTED = "accepted"              # 採用
-    REJECTED = "rejected"              # 不採用
-    ON_HOLD = "on_hold"               # 保留
+from app.models.enums import ProposalStatus
 
 
 class Comment(Base):
