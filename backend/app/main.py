@@ -15,7 +15,7 @@ from app.db.base import Base
 async def lifespan(app: FastAPI):
     """アプリケーションのライフサイクル管理"""
     # 起動時の処理
-    print("🚀 AIプレゼン自動スクリーニングシステム 起動中...")
+    print("[START] AI Presentation Auto-Screening System starting...")
     
     # DBテーブル作成（開発用）
     async with engine.begin() as conn:
@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
     yield
     
     # 終了時の処理
-    print("👋 システム終了")
+    print("[END] System shutdown")
 
 
 # FastAPIアプリケーション

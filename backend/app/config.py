@@ -15,10 +15,10 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     
     # データベース
-    DATABASE_URL: str = "postgresql+asyncpg://screening:screening123@localhost:5432/ai_screening"
+    DATABASE_URL: str = "postgresql+asyncpg://screening:screening123@localhost:5434/ai_screening"
     
     # Redis
-    REDIS_URL: str = "redis://localhost:6379"
+    REDIS_URL: str = "redis://localhost:6381"
     
     # JWT認証
     SECRET_KEY: str = "your-super-secret-key-change-in-production"
