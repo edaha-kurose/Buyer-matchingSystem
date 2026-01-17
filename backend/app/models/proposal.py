@@ -36,8 +36,14 @@ class Proposal(Base, TimestampMixin):
     # AI抽出データ
     extracted_info = Column(JSON, nullable=True)
     
+    # 消費ポイント
+    points_used = Column(Integer, default=300)  # 1提案あたり300ポイント
+    
     # リレーション
     supplier_org = relationship("Organization", back_populates="proposals")
+    supplier = relationship("User", back_populates="proposals", foreign_keys=[supplier_user_id])
     documents = relationship("Document", back_populates="proposal")
     evaluation = relationship("Evaluation", back_populates="proposal", uselist=False)
     qa_sessions = relationship("QASession", back_populates="proposal")
+    comments = relationship("Comment", back_populates="proposal")
+    progress_history = relationship("ProposalProgress", back_populates="proposal")

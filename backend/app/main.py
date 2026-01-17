@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.config import settings
-from app.api.v1 import auth, proposals, evaluations, summaries
+from app.api.v1 import auth, proposals, evaluations, summaries, supplier
 from app.db.session import engine
 from app.db.base import Base
 
@@ -60,6 +60,7 @@ app.include_router(auth.router, prefix="/api/v1/auth", tags=["認証"])
 app.include_router(proposals.router, prefix="/api/v1/proposals", tags=["提案"])
 app.include_router(evaluations.router, prefix="/api/v1/evaluations", tags=["評価"])
 app.include_router(summaries.router, prefix="/api/v1/summaries", tags=["要約"])
+app.include_router(supplier.router, prefix="/api/v1/supplier", tags=["サプライヤー"])
 
 
 @app.get("/")

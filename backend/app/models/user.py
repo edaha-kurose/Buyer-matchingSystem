@@ -28,3 +28,7 @@ class User(Base, TimestampMixin):
     
     # リレーション
     organization = relationship("Organization", back_populates="members")
+    proposals = relationship("Proposal", back_populates="supplier", foreign_keys="Proposal.supplier_id")
+    point_balance = relationship("PointBalance", back_populates="user", uselist=False)
+    comments = relationship("Comment", back_populates="user")
+    notifications = relationship("Notification", back_populates="user")
